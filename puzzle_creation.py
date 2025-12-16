@@ -73,7 +73,7 @@ def split_image_into_grid_pieces(image, n, randomize = True):
 
 def show_all_pieces(pieces, 
                     dimensions = None,
-                    title = None):
+                    title = "Current order of pieces..."):
     """
     Displays all pieces in an n x n grid.
     """
@@ -111,6 +111,6 @@ def reassemble_pieces(shuffled_pieces, placement_dict):
         reassembled_pieces.append(original_piece)
         reassembled_order.append((shuffle_id, inv_angle))
 
-    show_all_pieces(reassembled_pieces)
+    show_all_pieces(reassembled_pieces, title = "Reassembled pieces!")
 
     return reassembled_order
