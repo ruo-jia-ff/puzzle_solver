@@ -61,8 +61,8 @@ def split_image_into_grid_pieces(image, n, randomize = True):
         for orig_id, piece in enumerate(pieces):
             shuffle_id = shuffled_indices[orig_id]
             placement_dict[shuffle_id]['shuffle_id'] = orig_id
-            placement_dict[shuffle_id]['angle'] = random.choice([0, 90, 180, 270])
             new_angle = placement_dict[shuffle_id]['angle']
+            placement_dict[shuffle_id]['angle'] = random.choice([0, 90, 180, 270])
 
             new_piece = pieces[shuffle_id].rotate(new_angle, expand = True)
             new_pieces.append(new_piece)
@@ -73,7 +73,7 @@ def split_image_into_grid_pieces(image, n, randomize = True):
 
 def show_all_pieces(pieces, 
                     dimensions = None,
-                    title = None):
+                    title = "Pieces as they currently are..."):
     """
     Displays all pieces in an n x n grid.
     """
@@ -111,6 +111,6 @@ def reassemble_pieces(shuffled_pieces, placement_dict):
         reassembled_pieces.append(original_piece)
         reassembled_order.append((shuffle_id, inv_angle))
 
-    show_all_pieces(reassembled_pieces)
+    show_all_pieces(reassembled_pieces, title = "Reassembled pieces!")
 
     return reassembled_order
