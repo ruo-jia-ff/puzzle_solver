@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from collections import defaultdict, deque
 from copy import deepcopy
-from puzzle_piece_enhanced import Piece_of_Puzzle
+from puzzle_piece import Piece_of_Puzzle
 from PIL import Image
 
 def rotation_to_align(current_side, reference_side):
@@ -169,18 +169,19 @@ class PuzzleBoard:
         c1 = self._get_chain_index(piece_id1)
         c2 = self._get_chain_index(piece_id2)
         
-        if c1 is not None and c2 is not None:
-            if c1 != c2:
-                self.chains[c1].update(self.chains[c2])
-                for pid in self.chains[c2]:
-                    self.piece_to_chain[pid] = c1
-                del self.chains[c2]
+        if c1 is not None and c2 is not None and c1 != c2 and c1 < len(self.chains) and c2 < len(self.chains):
+            self.chains[c1].update(self.chains[c2])
+            for pid in self.chains[c2]:
+                self.piece_to_chain[pid] = c1
+            del self.chains[c2]
         elif c1 is not None:
-            self.chains[c1].add(piece_id2)
-            self.piece_to_chain[piece_id2] = c1
+            if c1 < len(self.chains):
+                self.chains[c1].add(piece_id2)
+                self.piece_to_chain[piece_id2] = c1
         elif c2 is not None:
-            self.chains[c2].add(piece_id1)
-            self.piece_to_chain[piece_id1] = c2
+            if c2 < len(self.chains):
+                self.chains[c2].add(piece_id1)
+                self.piece_to_chain[piece_id1] = c2
         else:
             new_index = len(self.chains)
             self.chains.append(set([piece_id1, piece_id2]))
@@ -194,6 +195,11 @@ class PuzzleBoard:
         """Rebuild placement map from scratch based on current edge_pairs"""
         self.placed_pieces = {}
         self.occupied_positions = {}
+        
+        # Permanently anchor piece 0 at (0,0)
+        if 0 in self.pieces:
+            self.placed_pieces[0] = ((0, 0), self.pieces[0])
+            self.occupied_positions[(0, 0)] = 0
         
         if not self.edge_pairs:
             return
@@ -332,26 +338,32 @@ class PuzzleBoard:
         for chain_idx, pieces_data in components.items():
             print(f"\n Visualizing component #{chain_idx + 1} with {len(pieces_data)} pieces")
             
-            # Normalize positions
+            # Normalize positions to top-left
             all_positions = [pos for _, pos, _ in pieces_data]
             min_x = min(x for x, y in all_positions)
             min_y = min(y for x, y in all_positions)
             
-            # Create final image
-            piece_size = self.pieces[pieces_data[0][0]].size
-            max_x = max(x for x, y in all_positions) - min_x
-            max_y = max(y for x, y in all_positions) - min_y
+            # Normalize all positions
+            normalized_positions = [(x - min_x, y - min_y) for x, y in all_positions]
             
-            num_cols = max_x + 1
-            num_rows = max_y + 1
+            # Compute grid dimensions from normalized positions
+            num_cols = max(x for x, y in normalized_positions) + 1
+            num_rows = max(y for x, y in normalized_positions) + 1
+            
+            # Get piece size
+            piece_size = self.pieces[pieces_data[0][0]].size
+            
+            # Create final image with tight bounding box
             final_img = Image.new("RGB", (num_cols * piece_size, num_rows * piece_size))
             
             _, ax = plt.subplots(figsize=(num_cols * 2, num_rows * 2))
             ax.axis('off')
             
             for piece_id, (orig_x, orig_y), piece in pieces_data:
+                # Normalize to top-left origin
                 x = orig_x - min_x
                 y = orig_y - min_y
+                
                 px = x * piece_size
                 py = y * piece_size
                 

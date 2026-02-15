@@ -1,0 +1,34 @@
+# Virtual Environment
+Puzzle_Solver/
+venv/
+env/
+
+# Model Weights
+*.pt
+model.pt
+model_best.pt
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
