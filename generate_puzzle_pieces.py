@@ -96,23 +96,23 @@ class Image_Puzzle:
         plt.tight_layout()
         plt.show()
 
-    def _show_reassembled(self, pieces, show_labels=False):
-        h = w = int(math.sqrt(len(pieces)))
-        _, axes = plt.subplots(h, w, figsize=(8, 8))
-        for i, ax in enumerate(axes.flat):
-            ax.imshow(pieces[i])
-            ax.axis("off")
+    # def _show_reassembled(self, pieces, show_labels=False):
+    #     h = w = int(math.sqrt(len(pieces)))
+    #     _, axes = plt.subplots(h, w, figsize=(8, 8))
+    #     for i, ax in enumerate(axes.flat):
+    #         ax.imshow(pieces[i])
+    #         ax.axis("off")
 
-            if show_labels and self.placement_dict:
-                shuffle_id = self.placement_dict[i]['shuffle_id']
-                angle = self.placement_dict[i]['angle']
-                ax.text(pieces[i].size[0] / 2, pieces[i].size[1] / 2, f"{shuffle_id}",
-                        color='white', ha='center', va='center', fontsize=12, weight='bold')
-                ax.text(pieces[i].size[0] / 2, pieces[i].size[1] / 2 + 25, f"{angle}°",
-                        color='yellow', ha='center', va='center', fontsize=10)
+    #         if show_labels and self.placement_dict:
+    #             shuffle_id = self.placement_dict[i]['shuffle_id']
+    #             angle = self.placement_dict[i]['angle']
+    #             ax.text(pieces[i].size[0] / 2, pieces[i].size[1] / 2, f"{shuffle_id}",
+    #                     color='white', ha='center', va='center', fontsize=12, weight='bold')
+    #             ax.text(pieces[i].size[0] / 2, pieces[i].size[1] / 2 + 25, f"{angle}°",
+    #                     color='yellow', ha='center', va='center', fontsize=10)
 
-        plt.tight_layout()
-        plt.show()
+        # plt.tight_layout()
+        # plt.show()
 
     def _rotate_back(self, piece, angle):
         if angle == 0:
@@ -181,5 +181,5 @@ class Image_Puzzle:
         return reassembled
 
 
-        def get_pieces(self):
-            return self.pieces
+    def get_pieces(self):
+        return self.pieces

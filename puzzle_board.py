@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from collections import defaultdict, deque
 from copy import deepcopy
-from puzzle_piece_enhanced import Piece_of_Puzzle
+from puzzle_piece import Piece_of_Puzzle
 from PIL import Image
 
 def rotation_to_align(current_side, reference_side):
